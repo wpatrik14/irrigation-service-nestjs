@@ -1,5 +1,5 @@
 import {Entity, Column, PrimaryGeneratedColumn, OneToMany} from "typeorm";
-import { Zone } from "./Zone";
+import { Zone } from "./zone.entity";
  
 @Entity("Area")
 export class Area {

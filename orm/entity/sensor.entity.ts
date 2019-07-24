@@ -1,6 +1,6 @@
 import { Entity, Column, ManyToOne } from "typeorm";
-import { Thing } from "./Thing";
-import { Zone } from "./Zone";
+import { Thing } from "./thing.entity";
+import { Zone } from "./zone.entity";
 
 @Entity("Sensor")
 export class Sensor extends Thing {

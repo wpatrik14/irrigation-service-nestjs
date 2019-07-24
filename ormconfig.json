@@ -1,0 +1,10 @@
+{
+    "type": "postgres",
+    "host": "irrigationdb.cwwnz9coipht.eu-central-1.rds.amazonaws.com",
+    "port": 5432,
+    "username": "root",
+    "password": "admin1234",
+    "database": "irrigation",
+    "entities": ["orm/**/*.entity{.ts,.js}"],
+    "synchronize": true
+  }

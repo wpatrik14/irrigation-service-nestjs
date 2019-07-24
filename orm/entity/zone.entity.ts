@@ -1,13 +1,13 @@
 import {Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, OneToMany, ManyToOne} from "typeorm";
-import { Relay } from "./Relay";
-import { Soil } from "./Soil";
-import { Plant } from "./Plant";
-import { Forecast } from "./Forecast";
-import { Schedule } from "./Schedule";
-import { Location } from "./Location";
-import { Area } from "./Area";
-import { WaterUsage } from "./WaterUsage";
-import { Sensor } from "./Sensor";
+import { Relay } from "./relay.entity";
+import { Soil } from "./soil.entity";
+import { Plant } from "./plant.entity";
+import { Forecast } from "./forecast.entity";
+import { Schedule } from "./schedule.entity";
+import { Location } from "./location.entity";
+import { Area } from "./area.entity";
+import { WaterUsage } from "./waterusage.entity";
+import { Sensor } from "./sensor.entity";
  
 @Entity("Zone")
 export class Zone {

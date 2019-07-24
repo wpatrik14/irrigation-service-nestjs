@@ -1,5 +1,5 @@
 import {Entity, Column, PrimaryGeneratedColumn, ManyToOne} from "typeorm";
-import { Zone } from "./Zone";
+import { Zone } from "./zone.entity";
  
 @Entity("WaterUsage")
 export class WaterUsage {
