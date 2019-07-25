@@ -1,19 +1,29 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
+import { Crud } from '@nestjsx/crud';
 import { Zone } from 'orm/entity/zone.entity';
 import { ZonesService } from './zones.service';
 
+@Crud({
+    model: {
+        type: Zone,
+    },
+    query: {
+        join: {
+            sensors: { eager: true },
+            relay: { eager: true },
+            schedules: { eager: true },
+            forecast: {},
+            plant: {},
+            soil: {},
+        },
+    },
+})
 @Controller('zones')
 export class ZonesController {
+    constructor(public service: ZonesService) {}
 
-    constructor(private readonly zonesService: ZonesService) {}
-
-    @Get()
-    findAll(): Promise<Zone[]> {
-        return this.zonesService.findAll();
-    }
-
-    @Get(':id')
-    find(@Param('id') id: number): Promise<Zone> {
-        return this.zonesService.find(id);
+    @Get('switchZone')
+    async switchZone(status: boolean) {
+        return "Hello world";
     }
 }

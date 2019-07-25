@@ -1,18 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { Zone } from 'orm/entity/zone.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
+import { Zone } from 'orm/entity/zone.entity';
 
 @Injectable()
-export class ZonesService {
-
-    constructor(@InjectRepository(Zone) private readonly zoneRepository: Repository<Zone>) {}
-
-    findAll(): Promise<Zone[]> {
-        return this.zoneRepository.find({relations: ['sensors', 'relay']});
-    }
-
-    find(id: number): Promise<Zone> {
-        return this.zoneRepository.findOne(id, {relations: ['sensors', 'relay']});
-    }
+export class ZonesService extends TypeOrmCrudService<Zone> {
+  constructor(@InjectRepository(Zone) repo) {
+    super(repo);
+  }
 }
