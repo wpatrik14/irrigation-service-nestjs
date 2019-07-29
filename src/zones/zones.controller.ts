@@ -21,9 +21,4 @@ import { ZonesService } from './zones.service';
 @Controller('zones')
 export class ZonesController {
     constructor(public service: ZonesService) {}
-
-    @Get('switchZone')
-    async switchZone(status: boolean) {
-        return "Hello world";
-    }
 }

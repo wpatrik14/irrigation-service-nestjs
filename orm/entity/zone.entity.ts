@@ -15,12 +15,13 @@ export class Zone {
     @PrimaryGeneratedColumn()
     id: number;
  
-    @OneToOne(_type => Relay, relay => relay.zone)
+    @OneToOne(_type => Relay, relay => relay.zone, {eager: true})
     @JoinColumn()
     relay: Relay;
 
     @OneToMany(_type => Sensor, sensor => sensor.zone, {
-        cascade: true
+        cascade: true,
+        eager: true
     })
     sensors: Sensor[];
 
