@@ -3,6 +3,7 @@ import { Crud } from '@nestjsx/crud';
 import { Relay } from 'orm/entity/relay.entity';
 import { RelaysService } from './relays.service';
 import { RelayView } from 'src/entities';
+import { SNS } from 'aws-sdk';
 
 @Crud({
     model: {
@@ -22,7 +23,7 @@ export class RelaysController {
     }
 
     @Post('notify')
-    async notify(@Body() relayView: RelayView) {
-        return this.service.messageReceived(relayView);
+    async notify(@Body() body) {
+        console.log(body);
     }
 }
