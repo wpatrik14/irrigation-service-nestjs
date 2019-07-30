@@ -23,18 +23,12 @@ export class RelaysController {
     }
 
     @Post('notify')
-    async notify(@Body() data, @Req() req) {
-        // we have to check req.readable because of raw-body issue #57
-        // https://github.com/stream-utils/raw-body/issues/57
+    async notify(@Req() req) {
         if (req.readable) {
-            // body is ignored by NestJS -> get raw body from request
             const raw = await rawbody(req);
-            const text = raw.toString().trim();
+            const text = JSON.parse(raw.toString().trim());
             console.log('body:', text);
     
-        } else {
-            // body is parsed by NestJS
-            console.log('data:', data);
         }
     }
 }
