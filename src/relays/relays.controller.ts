@@ -17,7 +17,12 @@ export class RelaysController {
     constructor(public service: RelaysService) {}
 
     @Post('switch')
-    async switchZone(@Body() relayView: RelayView) {
+    async switch(@Body() relayView: RelayView) {
         return this.service.switch(relayView);
+    }
+
+    @Post('notify')
+    async notify(@Body() relayView: RelayView) {
+        return this.service.messageReceived(relayView);
     }
 }
