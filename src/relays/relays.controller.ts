@@ -24,6 +24,6 @@ export class RelaysController {
 
     @Post('notify')
     async notify(@Body() body) {
-        console.log(body);
+        console.log(JSON.parse(body));
     }
 }
