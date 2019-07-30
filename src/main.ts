@@ -9,7 +9,7 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.enableCors();
   app.setGlobalPrefix('api');
-  app.use(express.static(join(__dirname, 'public')));
+  app.use(express.static(join(__dirname, '../public')));
 
   const options = new DocumentBuilder()
     .setTitle('Irrigation System')
