@@ -3,7 +3,7 @@ import { Crud } from '@nestjsx/crud';
 import { Relay } from 'orm/entity/relay.entity';
 import { RelaysService } from './relays.service';
 import { RelayView } from 'src/entities';
-import { SNS } from 'aws-sdk';
+import * as rawbody from 'raw-body';
 
 @Crud({
     model: {
@@ -23,7 +23,18 @@ export class RelaysController {
     }
 
     @Post('notify')
-    async notify(@Req() req) {
-        console.log(req.body);
+    async notify(@Body() data, @Req() req) {
+        // we have to check req.readable because of raw-body issue #57
+        // https://github.com/stream-utils/raw-body/issues/57
+        if (req.readable) {
+            // body is ignored by NestJS -> get raw body from request
+            const raw = await rawbody(req);
+            const text = raw.toString().trim();
+            console.log('body:', text);
+    
+        } else {
+            // body is parsed by NestJS
+            console.log('data:', data);
+        }
     }
 }
