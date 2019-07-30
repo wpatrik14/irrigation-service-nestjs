@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Req } from '@nestjs/common';
 import { Crud } from '@nestjsx/crud';
 import { Relay } from 'orm/entity/relay.entity';
 import { RelaysService } from './relays.service';
@@ -23,7 +23,7 @@ export class RelaysController {
     }
 
     @Post('notify')
-    async notify(@Body() body) {
-        console.log(body.SubscribeURL);
+    async notify(@Req() req) {
+        console.log(req.body);
     }
 }
