@@ -4,6 +4,7 @@ import { Relay } from 'orm/entity/relay.entity';
 import { RelaysService } from './relays.service';
 import { RelayView } from 'src/entities';
 import * as rawbody from 'raw-body';
+import { Repository } from 'typeorm';
 
 @Crud({
     model: {
@@ -26,9 +27,9 @@ export class RelaysController {
     async notify(@Req() req) {
         if (req.readable) {
             const raw = await rawbody(req);
-            const text = JSON.parse(raw.toString().trim());
-            console.log('body:', text);
-    
+            const body = JSON.parse(raw.toString().trim());
+            const relayView: RelayView = JSON.parse(body.Message.toString().trim());
+            return this.service.messageReceived(relayView);    
         }
     }
 }

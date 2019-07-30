@@ -25,13 +25,13 @@ export class RelaysService extends TypeOrmCrudService<Relay> {
     }
 
     async messageReceived(relayView: RelayView) {
-        const relay = await this.repo.findOne({ endpoint: relayView.endpoint, clientId: relayView.clientId, gpio: relayView.gpio });
+        const relay = await this.repo.findOne({ clientId: relayView.clientId, gpio: relayView.gpio });
         relay.status = relayView.status;
         if (relayView.status) {
             relay.lastStartOnUTC=new Date();
         } else {
             relay.lastEndOnUTC=new Date();
         }
-        this.repo.save(relay);
+        return await this.repo.save(relay);
     }
 }
