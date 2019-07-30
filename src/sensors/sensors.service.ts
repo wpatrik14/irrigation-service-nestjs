@@ -13,6 +13,7 @@ export class SensorsService extends TypeOrmCrudService<Sensor> {
     async messageReceived(sensorView: SensorView) {
         const sensor = await this.repo.findOne({ clientId: sensorView.clientId });
         sensor.updatedOnUTC = new Date();
+        sensor.value = sensorView.value;
         return await this.repo.save(sensor);
     }
 }
