@@ -26,7 +26,7 @@ export interface PlantView {
 
 export interface RelayView {
     id?: number;
-    endpoint: string;
+    endpoint?: string;
     clientId: string;
     gpio: string;
     status: boolean;

@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Req } from '@nestjs/common';
+import { Controller, Post, Body, Req, Get } from '@nestjs/common';
 import { Crud } from '@nestjsx/crud';
 import { Relay } from 'orm/entity/relay.entity';
 import { RelaysService } from './relays.service';
