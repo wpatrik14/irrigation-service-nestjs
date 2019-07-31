@@ -16,29 +16,26 @@ import * as AWS from 'aws-sdk';
     },
 })
 @Controller('sensors')
-export class SensorsController {
+export class SensorsController {    
+    private sqsParams = {
+        AttributeNames: [
+           "SentTimestamp"
+        ],
+        MaxNumberOfMessages: 10,
+        MessageAttributeNames: [
+           "All"
+        ],
+        QueueUrl: 'https://sqs.eu-central-1.amazonaws.com/981419062120/sensorsData',
+        VisibilityTimeout: 20,
+        WaitTimeSeconds: 0,
+       };
+    private sqs = new AWS.SQS();
+    
     constructor(public service: SensorsService, public gateway: SensorsGateway) {
         AWS.config.update({region: 'eu-central-1'});
-        const sqs = new AWS.SQS();
-        sqs.receiveMessage({
-            AttributeNames: [
-               "SentTimestamp"
-            ],
-            MaxNumberOfMessages: 10,
-            MessageAttributeNames: [
-               "All"
-            ],
-            QueueUrl: 'https://sqs.eu-central-1.amazonaws.com/981419062120/sensorsData',
-            VisibilityTimeout: 20,
-            WaitTimeSeconds: 0,
-           }, function(err, data) {
-            if (err) {
-              console.log("Receive Error", err);
-            } else if (data.Messages) {
-              console.log(`Received message ${data}`)
-            }
-          });
-
+        setInterval(() => {
+            this.sqs.receiveMessage(this.sqsParams, this.onSensorValueUpdated);
+        }, 1000*60);
     }
 
     @Post('notify')
@@ -51,5 +48,24 @@ export class SensorsController {
             const sensor = await this.service.onUpdatedValue(sensorView);
             await this.gateway.notifyClients(sensor);
         }
+    }
+
+    onSensorValueUpdated(err, data) {
+        if (err) {
+            console.log("Receive Error", err);
+          } else if (data.Messages) {
+            console.log(`Received message on SQS: ${data.Messages.toString()}`)
+            var deleteParams = {
+              QueueUrl: 'https://sqs.eu-central-1.amazonaws.com/981419062120/sensorsData',
+              ReceiptHandle: data.Messages[0].ReceiptHandle
+            };
+            this.sqs.deleteMessage(deleteParams, function(err, data) {
+              if (err) {
+                console.log("Delete Error", err);
+              } else {
+                console.log("Message Deleted", data);
+              }
+            });
+          }
     }
 }
