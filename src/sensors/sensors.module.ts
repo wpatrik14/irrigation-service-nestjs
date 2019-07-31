@@ -3,12 +3,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Sensor } from 'orm/entity/sensor.entity';
 import { SensorsController } from './sensors.controller';
 import { SensorsService } from './sensors.service';
-import { RelaysGateway } from 'src/relays/relays.gateway';
+import { SensorsGateway } from './sensors.gateway';
 
 @Module({
     imports: [TypeOrmModule.forFeature([Sensor])],
     controllers: [SensorsController],
-    providers: [SensorsService, RelaysGateway ],
+    providers: [SensorsService, SensorsGateway ],
     exports: [SensorsService],
 })
 export class SensorsModule {}
