@@ -5,6 +5,7 @@ import { SensorsService } from './sensors.service';
 import * as rawbody from 'raw-body';
 import { SensorView } from 'src/entities';
 import { SensorsGateway } from './sensors.gateway';
+import { SQS } from 'aws-sdk';
 
 @Crud({
     model: {
@@ -16,7 +17,28 @@ import { SensorsGateway } from './sensors.gateway';
 })
 @Controller('sensors')
 export class SensorsController {
-    constructor(public service: SensorsService, public gateway: SensorsGateway) {}
+    constructor(public service: SensorsService, public gateway: SensorsGateway) {
+        const sqs = new SQS();
+        sqs.receiveMessage({
+            AttributeNames: [
+               "SentTimestamp"
+            ],
+            MaxNumberOfMessages: 10,
+            MessageAttributeNames: [
+               "All"
+            ],
+            QueueUrl: 'https://sqs.eu-central-1.amazonaws.com/981419062120/sensorsData',
+            VisibilityTimeout: 20,
+            WaitTimeSeconds: 0
+           }, function(err, data) {
+            if (err) {
+              console.log("Receive Error", err);
+            } else if (data.Messages) {
+              console.log(`Received message ${data}`)
+            }
+          });
+
+    }
 
     @Post('notify')
     async notify(@Req() req) {
