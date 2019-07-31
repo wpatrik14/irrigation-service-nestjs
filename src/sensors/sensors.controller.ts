@@ -18,7 +18,9 @@ import { SQS } from 'aws-sdk';
 @Controller('sensors')
 export class SensorsController {
     constructor(public service: SensorsService, public gateway: SensorsGateway) {
-        const sqs = new SQS();
+        const sqs = new SQS({
+            region: 'eu-central-1'
+        });
         sqs.receiveMessage({
             AttributeNames: [
                "SentTimestamp"
