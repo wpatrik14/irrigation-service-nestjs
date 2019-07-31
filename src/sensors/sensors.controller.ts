@@ -22,9 +22,9 @@ export class SensorsController {
     async notify(@Req() req) {
         if (req.readable) {
             const raw = await rawbody(req);
-            console.log(`Received message from SNS: ${raw}`);
             const body = JSON.parse(raw.toString().trim());
             const sensorView: SensorView = JSON.parse(body.Message.toString().trim());
+            console.log(`Received message from SNS: ${JSON.stringify(sensorView)}`);
             const sensor = await this.service.onUpdatedValue(sensorView);
             await this.gateway.notifyClients(sensor);
         }

@@ -27,9 +27,9 @@ export class RelaysController {
     async notify(@Req() req) {
         if (req.readable) {
             const raw = await rawbody(req);
-            console.log(`Received message from SNS: ${raw}`);
             const body = JSON.parse(raw.toString().trim());
             const relayView: RelayView = JSON.parse(body.Message.toString().trim());
+            console.log(`Received message from SNS: ${JSON.stringify(relayView)}`);
             const relay = await this.service.onUpdateMessage(relayView);
             this.gateway.notifyClients(relay);
         }
