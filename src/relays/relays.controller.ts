@@ -4,6 +4,7 @@ import { Relay } from 'orm/entity/relay.entity';
 import { RelaysService } from './relays.service';
 import { RelayView } from 'src/entities';
 import * as rawbody from 'raw-body';
+import { RelaysGateway } from './relays.gateway';
 
 @Crud({
     model: {
@@ -15,7 +16,7 @@ import * as rawbody from 'raw-body';
 })
 @Controller('relays')
 export class RelaysController {
-    constructor(public service: RelaysService) {}
+    constructor(public service: RelaysService, public gateway: RelaysGateway) {}
 
     @Post('switch')
     async switch(@Body() relayView: RelayView) {
@@ -29,6 +30,7 @@ export class RelaysController {
             console.log(`Received message from SNS: ${raw}`);
             const body = JSON.parse(raw.toString().trim());
             const relayView: RelayView = JSON.parse(body.Message.toString().trim());
+            this.gateway.notifyClients(relayView);
             return this.service.messageReceived(relayView);    
         }
     }

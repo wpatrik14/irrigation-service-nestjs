@@ -24,6 +24,7 @@ import { SoilsModule } from './soils/soils.module';
 import { AreasController } from './areas/areas.controller';
 import { AreasService } from './areas/areas.service';
 import { AreasModule } from './areas/areas.module';
+import { RelaysGateway } from './relays/relays.gateway';
 
 @Module({
   imports: [TypeOrmModule.forRoot(),
@@ -36,6 +37,6 @@ import { AreasModule } from './areas/areas.module';
     SoilsModule,
     AreasModule],
   controllers: [AppController, RelaysController, SensorsController, ForecastsController, SchedulesController, PlantsController, SoilsController, AreasController],
-  providers: [AppService, RelaysService, SensorsService, ForecastsService, SchedulesService, PlantsService, SoilsService, AreasService],
+  providers: [AppService, RelaysService, RelaysGateway, SensorsService, ForecastsService, SchedulesService, PlantsService, SoilsService, AreasService],
 })
 export class AppModule {}
