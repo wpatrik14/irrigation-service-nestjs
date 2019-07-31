@@ -29,10 +29,11 @@ export class SensorsController {
         VisibilityTimeout: 20,
         WaitTimeSeconds: 0,
        };
-    private sqs = new AWS.SQS();
+    private sqs;
     
     constructor(public service: SensorsService, public gateway: SensorsGateway) {
         AWS.config.update({region: 'eu-central-1'});
+        this.sqs=new AWS.SQS();
         setInterval(() => {
             this.sqs.receiveMessage(this.sqsParams, this.onSensorValueUpdated);
         }, 1000*60);
@@ -54,7 +55,7 @@ export class SensorsController {
         if (err) {
             console.log("Receive Error", err);
           } else if (data.Messages) {
-            console.log(`Received message on SQS: ${data.Messages.toString()}`)
+            console.log(`Received message on SQS: ${data.Messages[0].toString()}`)
             var deleteParams = {
               QueueUrl: 'https://sqs.eu-central-1.amazonaws.com/981419062120/sensorsData',
               ReceiptHandle: data.Messages[0].ReceiptHandle
