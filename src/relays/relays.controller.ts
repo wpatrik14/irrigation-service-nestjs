@@ -30,8 +30,8 @@ export class RelaysController {
             console.log(`Received message from SNS: ${raw}`);
             const body = JSON.parse(raw.toString().trim());
             const relayView: RelayView = JSON.parse(body.Message.toString().trim());
-            this.gateway.notifyClients(relayView);
-            return this.service.messageReceived(relayView);    
+            const relay = await this.service.onUpdateMessage(relayView);
+            this.gateway.notifyClients(relay);
         }
     }
 }

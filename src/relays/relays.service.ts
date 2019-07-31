@@ -24,7 +24,7 @@ export class RelaysService extends TypeOrmCrudService<Relay> {
         }).promise();
     }
 
-    async messageReceived(relayView: RelayView) {
+    async onUpdateMessage(relayView: RelayView) {
         const relay = await this.repo.findOne({ clientId: relayView.clientId, gpio: relayView.gpio });
         relay.status = relayView.status;
         if (relayView.status) {

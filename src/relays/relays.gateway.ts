@@ -1,13 +1,13 @@
 import { WebSocketGateway, WebSocketServer, SubscribeMessage, OnGatewayConnection, OnGatewayDisconnect } from '@nestjs/websockets';
-import { RelayView } from 'src/entities';
+import { Relay } from 'orm/entity/relay.entity';
 
 @WebSocketGateway()
 export class RelaysGateway {
 
     @WebSocketServer() server;
 
-    async notifyClients(relayView: RelayView) {
-        await this.server.emit('relayStateChanged', relayView);
+    async notifyClients(relay: Relay) {
+        await this.server.emit('relayStateChanged', relay);
     }
 
     @SubscribeMessage('clientUpdate')
