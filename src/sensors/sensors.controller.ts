@@ -5,7 +5,7 @@ import { SensorsService } from './sensors.service';
 import * as rawbody from 'raw-body';
 import { SensorView } from 'src/entities';
 import { SensorsGateway } from './sensors.gateway';
-import { SQS } from 'aws-sdk';
+import * as AWS from 'aws-sdk';
 
 @Crud({
     model: {
@@ -18,9 +18,8 @@ import { SQS } from 'aws-sdk';
 @Controller('sensors')
 export class SensorsController {
     constructor(public service: SensorsService, public gateway: SensorsGateway) {
-        const sqs = new SQS({
-            region: 'eu-central-1'
-        });
+        AWS.config.update({region: 'eu-central-1'});
+        const sqs = new AWS.SQS();
         sqs.receiveMessage({
             AttributeNames: [
                "SentTimestamp"
@@ -31,7 +30,7 @@ export class SensorsController {
             ],
             QueueUrl: 'https://sqs.eu-central-1.amazonaws.com/981419062120/sensorsData',
             VisibilityTimeout: 20,
-            WaitTimeSeconds: 0
+            WaitTimeSeconds: 0,
            }, function(err, data) {
             if (err) {
               console.log("Receive Error", err);
