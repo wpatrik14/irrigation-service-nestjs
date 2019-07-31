@@ -55,7 +55,7 @@ export class SensorsController {
         if (err) {
             console.log("Receive Error", err);
           } else if (data.Messages) {
-            console.log(`Received message on SQS: ${data.Messages[0].MessageBody}`)
+            console.log(`Received message on SQS: ${data.Messages[0].MessageBody.toString()}`)
             var deleteParams = {
               QueueUrl: 'https://sqs.eu-central-1.amazonaws.com/981419062120/sensorsData',
               ReceiptHandle: data.Messages[0].ReceiptHandle
