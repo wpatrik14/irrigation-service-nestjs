@@ -11,6 +11,7 @@ export interface ForecastView {
     mm: number;
     calculation: string;
     enabled: boolean;
+    zone?: ZoneView;
 }
 
 export interface LocationView {
@@ -40,6 +41,7 @@ export interface ScheduleView {
     cronExpression: string;
     durationInMinutes: number;
     enabled: boolean;
+    zone?: ZoneView;
 }
 
 export interface SensorView {

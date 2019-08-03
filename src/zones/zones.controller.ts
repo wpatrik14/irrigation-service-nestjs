@@ -12,7 +12,7 @@ import { ZonesService } from './zones.service';
             sensors: { eager: true },
             relay: { eager: true },
             schedules: { eager: true },
-            forecast: {},
+            forecast: { eager: true },
             plant: {},
             soil: {},
         },
