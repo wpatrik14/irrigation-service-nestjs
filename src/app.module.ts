@@ -26,9 +26,15 @@ import { AreasService } from './areas/areas.service';
 import { AreasModule } from './areas/areas.module';
 import { RelaysGateway } from './relays/relays.gateway';
 import { SensorsGateway } from './sensors/sensors.gateway';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(),
+  imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'client'),
+    }),
+    TypeOrmModule.forRoot(),
     ZonesModule,
     RelaysModule,
     SensorsModule,

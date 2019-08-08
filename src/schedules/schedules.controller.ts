@@ -14,21 +14,21 @@ import { Schedule } from 'orm/entity/schedule.entity';
 })
 @Controller('schedules')
 export class SchedulesController {
-    constructor(public schedulesService: SchedulesService) {}
+    constructor(public service: SchedulesService) {}
 
     @Post()
     async create(@Body() schedule: ScheduleView) {
-        return this.schedulesService.scheduleZone(schedule);
+        return this.service.scheduleZone(schedule);
     }
 
     @Put(':id')
     async toogle(@Param('id') id: number, @Body() schedule: ScheduleView) {
         schedule.id = id;
-        return this.schedulesService.toogleSchedule(schedule);
+        return this.service.toogleSchedule(schedule);
     }
 
     @Delete(':id')
     async delete(@Param('id') id: number) {
-        return this.schedulesService.deleteSchedule(id);
+        return this.service.deleteSchedule(id);
     }
 }

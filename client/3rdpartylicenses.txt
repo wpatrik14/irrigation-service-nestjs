@@ -74,6 +74,8 @@ THE SOFTWARE.
 
 @angular/material/list
 
+@angular/material/progress-spinner
+
 @angular/platform-browser
 MIT
 
