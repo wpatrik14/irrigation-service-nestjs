@@ -13,17 +13,13 @@ import { map, switchMap } from 'rxjs/operators';
 export class ForecastsController {
     constructor(public service: ForecastsService) {}
 
-    @Get('rain')
+    @Get('data')
     getForecast() {
-        return this.service.getForecast().pipe(
-            map(response => {
-                return response.data.map(weatherData => {
-                    return {
-                        temp: weatherData.Temperature.Value,
-                        mm: weatherData.Rain.Value,                        
-                        date: weatherData.DateTime
-                    }
-                })
-            }));
+        return this.service.getForecast(46.804116, 17.804950).pipe(
+            map(weatherData => {
+                return weatherData.data;
+            }) 
+        );
     }
+
 }

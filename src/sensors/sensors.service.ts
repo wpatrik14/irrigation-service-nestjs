@@ -2,18 +2,55 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
 import { Sensor } from 'orm/entity/sensor.entity';
-import { SensorView } from 'src/entities';
+import { DynamoDB } from 'aws-sdk';
 
 @Injectable()
 export class SensorsService extends TypeOrmCrudService<Sensor> {
-    constructor(@InjectRepository(Sensor) repo) {
-        super(repo);
-    }
+  constructor(@InjectRepository(Sensor) repo) {
+    super(repo);
+  }
 
-    async onUpdatedValue(sensorView: SensorView) {
-        const sensor = await this.repo.findOne({ clientId: sensorView.clientId });
-        sensor.updatedOnUTC = new Date();
-        sensor.value = sensorView.value;
-        return await this.repo.save(sensor);
+  async getAllForClient(clientId: string, type: string) {
+    const docClient = new DynamoDB.DocumentClient({ region: 'eu-central-1' });
+    const params = {
+      TableName: 'SensorValue',
+      FilterExpression: 'id = :id',
+      ExpressionAttributeValues: { ':id': `${clientId}_${type}` },
+    };
+    try {
+      return await docClient.scan(params).promise();
+    } catch (e) {
+      console.log(e.message)
     }
+  }
+
+  async getLatestForClient(clientId: string, type: string) {
+    const docClient = new DynamoDB.DocumentClient({ region: 'eu-central-1' });
+    const params = {
+      TableName: 'SensorValue',
+      KeyConditionExpression: 'id = :id',
+      ExpressionAttributeValues: { ':id': `${clientId}_${type}` },
+      ScanIndexForward : false,
+      Limit : 1,
+    };
+    try {
+      return await docClient.query(params).promise();
+    } catch (e) {
+      console.log(e.message)
+    }
+  }
+
+  async getTypes(clientId: string) {
+    const docClient = new DynamoDB.DocumentClient({ region: 'eu-central-1' });
+    const params = {
+      TableName: 'SensorType',
+      FilterExpression: 'clientId = :clientId',
+      ExpressionAttributeValues: { ':clientId': clientId },
+    };
+    try {
+      return await docClient.scan(params).promise();
+    } catch (e) {
+      console.log(e.message)
+    }
+  }
 }

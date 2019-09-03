@@ -48,8 +48,6 @@ export interface SensorView {
     id?: number;
     endpoint?: string;
     clientId: string;
-    updatedOnUTC?: Date;
-    value: string;
     zone?: ZoneView;
 }
 

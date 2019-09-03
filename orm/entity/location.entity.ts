@@ -8,10 +8,10 @@ export class Location {
     id: number;
  
     @Column()
-    longitude: string;
+    longitude: number;
 
     @Column()
-    latitude: string;
+    latitude: number;
 
     @OneToOne(_type => Zone, zone => zone.relay)
     zone: Zone;

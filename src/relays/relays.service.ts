@@ -17,10 +17,9 @@ export class RelaysService extends TypeOrmCrudService<Relay> {
             endpoint: relay.endpoint,
             region: 'eu-central-1'
         });
-        await device.publish({
+        await device.updateThingShadow({
             payload: JSON.stringify(relayView),
-            topic: relay.clientId,
-            qos: 0
+            thingName: relayView.clientId,
         }).promise();
     }
 

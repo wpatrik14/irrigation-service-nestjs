@@ -1,13 +1,12 @@
-import { WebSocketGateway, WebSocketServer, SubscribeMessage, OnGatewayConnection, OnGatewayDisconnect } from '@nestjs/websockets';
-import { Relay } from 'orm/entity/relay.entity';
-import { Sensor } from 'orm/entity/sensor.entity';
+import { WebSocketGateway, WebSocketServer, SubscribeMessage } from '@nestjs/websockets';
+import { SensorView } from 'src/entities';
 
 @WebSocketGateway()
 export class SensorsGateway {
 
     @WebSocketServer() server;
 
-    async notifyClients(sensor: Sensor) {
+    async notifyClients(sensor: SensorView) {
         await this.server.emit('sensorValueChanged', sensor);
     }
 

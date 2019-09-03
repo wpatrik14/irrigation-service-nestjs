@@ -1,4 +1,5 @@
-import {Column, PrimaryGeneratedColumn} from "typeorm";
+import {Column, PrimaryGeneratedColumn, ManyToOne} from "typeorm";
+import { Zone } from "./zone.entity";
  
 export abstract class Thing {
  
@@ -11,4 +12,6 @@ export abstract class Thing {
     @Column()
     clientId: string;
 
+    @ManyToOne(_type => Zone, zone => zone.sensors)
+    zone: Zone;
 }

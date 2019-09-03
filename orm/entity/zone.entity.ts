@@ -6,7 +6,7 @@ import { Forecast } from "./forecast.entity";
 import { Schedule } from "./schedule.entity";
 import { Location } from "./location.entity";
 import { Area } from "./area.entity";
-import { WaterUsage } from "./waterusage.entity";
+import { WaterUsage } from "./water-usage.entity";
 import { Sensor } from "./sensor.entity";
  
 @Entity("Zone")
