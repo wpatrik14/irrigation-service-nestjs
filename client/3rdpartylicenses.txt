@@ -338,6 +338,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 has-cors
 MIT
 
+highcharts
+https://www.highcharts.com/license
+
 indexof
 
 isarray
