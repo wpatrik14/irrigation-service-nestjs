@@ -5,9 +5,15 @@ import { Relay } from 'orm/entity/relay.entity';
 import { RelayView } from 'src/entities';
 import { IotData } from 'aws-sdk';
 
+interface Schedule {
+    relay: RelayView;
+    timeout: NodeJS.Timeout;
+}
+
 @Injectable()
 export class RelaysService extends TypeOrmCrudService<Relay> {
     private readonly logger = new Logger(RelaysService.name);
+    private schedules: Schedule[] = [];
     
     constructor(@InjectRepository(Relay) repo) {
         super(repo);
@@ -27,7 +33,9 @@ export class RelaysService extends TypeOrmCrudService<Relay> {
         }).promise();
         if (relayView.status) {
             relay.lastStartOnUTC=new Date();
-            setTimeout(async () => {
+            this.schedules.push({
+                relay: relayView, 
+                timeout: setTimeout(async () => {
                 this.logger.log("Turning off");
                 relayView.status = !relayView.status;
                 await device.publish({
@@ -37,9 +45,13 @@ export class RelaysService extends TypeOrmCrudService<Relay> {
                 }).promise();
                 relay.status = !relay.status;
                 await this.repo.save(relay);
-            }, relayView.duration*60*1000);
+            }, relayView.duration*60*1000)});
         } else {
             relay.lastEndOnUTC=new Date();
+            const schedule = this.schedules.find(schedule => schedule.relay.clientId===relay.clientId && schedule.relay.gpio===relay.gpio);
+            if (schedule) {
+                clearTimeout(schedule.timeout);
+            }
         }        
         return await this.repo.save(relay);
     }
