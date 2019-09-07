@@ -21,7 +21,7 @@ export class SensorsController {
 
     @Post('notify')
     async notify(@Body() sensor: any) {
-        this.logger.log(JSON.stringify(sensor));
+        this.gateway.notifyClients(sensor);
     }
 
     @Get(':clientId/:type')
