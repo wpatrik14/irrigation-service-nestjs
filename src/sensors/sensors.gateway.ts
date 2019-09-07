@@ -6,7 +6,7 @@ export class SensorsGateway {
 
     @WebSocketServer() server;
 
-    async notifyClients(sensor: SensorView) {
+    async notifyClients(sensor: any) {
         await this.server.emit('sensorValueChanged', sensor);
     }
 
