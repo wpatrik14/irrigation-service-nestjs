@@ -1,4 +1,4 @@
-import { Controller, Post, Req, Get, Param, Query } from '@nestjs/common';
+import { Controller, Post, Req, Get, Param, Query, Body, Logger } from '@nestjs/common';
 import { Sensor } from 'orm/entity/sensor.entity';
 import { Crud } from '@nestjsx/crud';
 import { SensorsService } from './sensors.service';
@@ -15,18 +15,13 @@ import { SensorsGateway } from './sensors.gateway';
     },
 })
 @Controller('sensors')
-export class SensorsController {        
+export class SensorsController { 
+    private readonly logger = new Logger(SensorsController.name);       
     constructor(public service: SensorsService, public gateway: SensorsGateway) {}
 
     @Post('notify')
-    async notify(@Req() req) {
-        if (req.readable) {
-            const raw = await rawbody(req);
-            const body = JSON.parse(raw.toString().trim());
-            const sensorView: SensorView = JSON.parse(body.Message.toString().trim());
-            console.log(`Received message from SNS: ${JSON.stringify(sensorView)}`);
-            await this.gateway.notifyClients(sensorView);
-        }
+    async notify(@Body() sensor: any) {
+        this.logger.log(JSON.stringify(sensor));
     }
 
     @Get(':clientId/:type')
