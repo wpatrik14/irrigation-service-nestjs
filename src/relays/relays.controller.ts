@@ -20,18 +20,8 @@ export class RelaysController {
 
     @Post('switch')
     async switch(@Body() relayView: RelayView) {
-        return this.service.switch(relayView);
-    }
-
-    @Post('notify')
-    async notify(@Req() req) {
-        if (req.readable) {
-            const raw = await rawbody(req);
-            const body = JSON.parse(raw.toString().trim());
-            const relayView: RelayView = JSON.parse(body.Message.toString().trim());
-            console.log(`Received message from SNS: ${JSON.stringify(relayView)}`);
-            const relay = await this.service.onUpdateMessage(relayView);
-            this.gateway.notifyClients(relay);
-        }
+        const relay = await this.service.switch(relayView);
+        await this.gateway.notifyClients(relay);
+        return relay;
     }
 }
