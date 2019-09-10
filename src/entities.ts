@@ -46,9 +46,17 @@ export interface ScheduleView {
 
 export interface SensorView {
     id?: number;
-    endpoint?: string;
+    endpoint: string;
     clientId: string;
     zone?: ZoneView;
+    values?: SensorValueView[];
+}
+
+export interface SensorValueView {
+    type: string;
+    value: string;
+    insertedOnUTC: Date;
+    unit: string;
 }
 
 export interface SoilView {

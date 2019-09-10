@@ -15,23 +15,33 @@ import { SensorsGateway } from './sensors.gateway';
     },
 })
 @Controller('sensors')
-export class SensorsController { 
-    private readonly logger = new Logger(SensorsController.name);       
+export class SensorsController {      
     constructor(public service: SensorsService, public gateway: SensorsGateway) {}
 
     @Post('notify')
-    async notify(@Body() sensor: any) {
-        this.gateway.notifyClients(sensor);
+    async notify(@Body() data: any) {
+        const sensor = await this.service.findOne(data.clientId);
+        const sensorView: SensorView = {
+            clientId: sensor.clientId,
+            endpoint: sensor.endpoint,
+            values: [
+                {
+                    insertedOnUTC: new Date(),
+                    type: data.type,
+                    unit: data.unit,
+                    value: data.value,
+                }
+            ]
+        };
+        this.gateway.notifyClients(sensorView);
     }
 
     @Get(':clientId/:type')
-    async getAllForClient(@Param('clientId') clientId: string, @Param('type') type: string) {
-        return this.service.getAllForClient(clientId, type);
-    }
-
-    @Get(':clientId/:type/latest')
-    async getLatestForClient(@Param('clientId') clientId: string, @Param('type') type: string) {
-        return this.service.getLatestForClient(clientId, type);
+    async getAllForClient(
+        @Param('clientId') clientId: string, 
+        @Param('type') type: string,
+        @Query('limit') limit: number) {
+        return this.service.getAllForClient(clientId, type, limit);
     }
 
     @Get('types')
