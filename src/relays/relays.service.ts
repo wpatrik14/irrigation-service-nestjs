@@ -14,7 +14,7 @@ interface Schedule {
 export class RelaysService extends TypeOrmCrudService<Relay> {
     private readonly logger = new Logger(RelaysService.name);
     private schedules: Schedule[] = [];
-    
+
     constructor(@InjectRepository(Relay) repo) {
         super(repo);
     }
@@ -27,32 +27,33 @@ export class RelaysService extends TypeOrmCrudService<Relay> {
             region: 'eu-central-1'
         });
         await device.publish({
-            payload: JSON.stringify({state: {desired: relayView }}), 
-            topic: '$aws/things/ESP32Relay/shadow/update', 
-            qos: 1 
+            payload: JSON.stringify({ state: { desired: relayView } }),
+            topic: '$aws/things/ESP32Relay/shadow/update',
+            qos: 1
         }).promise();
         if (relayView.status) {
-            relay.lastStartOnUTC=new Date();
+            relay.lastStartOnUTC = new Date();
             this.schedules.push({
-                relay: relayView, 
+                relay: relayView,
                 timeout: setTimeout(async () => {
-                this.logger.log("Turning off");
-                relayView.status = !relayView.status;
-                await device.publish({
-                    payload: JSON.stringify({state: {desired: relayView }}), 
-                    topic: '$aws/things/ESP32Relay/shadow/update', 
-                    qos: 1 
-                }).promise();
-                relay.status = !relay.status;
-                await this.repo.save(relay);
-            }, relayView.duration*60*1000)});
+                    this.logger.log("Turning off");
+                    relayView.status = !relayView.status;
+                    await device.publish({
+                        payload: JSON.stringify({ state: { desired: relayView } }),
+                        topic: '$aws/things/ESP32Relay/shadow/update',
+                        qos: 1
+                    }).promise();
+                    relay.status = !relay.status;
+                    await this.repo.save(relay);
+                }, relayView.duration * 60 * 1000)
+            });
         } else {
-            relay.lastEndOnUTC=new Date();
-            const schedule = this.schedules.find(schedule => schedule.relay.clientId===relay.clientId && schedule.relay.gpio===relay.gpio);
+            relay.lastEndOnUTC = new Date();
+            const schedule = this.schedules.find(schedule => schedule.relay.clientId === relay.clientId && schedule.relay.gpio === relay.gpio);
             if (schedule) {
                 clearTimeout(schedule.timeout);
             }
-        }        
+        }
         return await this.repo.save(relay);
     }
 }
