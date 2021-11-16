@@ -30,7 +30,7 @@
     "@nestjs/websockets": "^6.5.3",
     "@nestjsx/crud": "^4.1.0",
     "@nestjsx/crud-typeorm": "^4.1.0",
-    "aws-sdk": "^2.502.0",
+    "aws-sdk": "^2.814.0",
     "class-transformer": "^0.2.3",
     "class-validator": "^0.9.1",
     "cron": "^1.7.1",
